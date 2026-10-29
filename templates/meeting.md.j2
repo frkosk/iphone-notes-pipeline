@@ -1,0 +1,27 @@
+---
+date: {{ date }}
+time: "{{ time }}"
+duration: "{{ duration }}"
+language: {{ language }}
+speakers: {{ speakers }}
+source: "{{ source_filename }}"
+source_path: "{{ source_path }}"
+status: raw
+---
+
+> [!TIP] Prompt pre AI (copy-paste do ChatGPT/Claude/Gemini)
+> Toto je prepis klientskeho stretnutia. Speakery sú označené A/B/C podľa
+> poradia v akom prehovorili (nie podľa mien). Ja som väčšinou ten čo
+> kladie otázky — identifikuj ma a nahraď "{{ user_name }}".
+> Ak je prepis po anglicky, odpovedaj po anglicky.
+> Potom:
+> 1. Zosumarizuj v 5 bodoch
+> 2. Vypíš action items (kto, čo, dokedy)
+> 3. Vypíš otvorené otázky a rozhodnutia
+
+## Prepis
+
+{% for seg in segments -%}
+**Speaker {{ seg.speaker }} [{{ seg.ts }}]:** {{ seg.text }}
+
+{% endfor %}

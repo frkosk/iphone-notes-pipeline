@@ -1,0 +1,23 @@
+#!/bin/bash
+# Entry point. Finds the right Python (bundled pkg venv OR dev venv) and runs the module.
+set -euo pipefail
+
+PKG_ROOT="/usr/local/opt/meet-transcriber"
+DEV_ROOT=""
+
+# dev install symlinks PKG_ROOT → repo; detect via marker
+if [ -L "$PKG_ROOT" ]; then
+    DEV_ROOT="$(readlink "$PKG_ROOT")"
+fi
+
+# Resolve python interpreter
+if [ -x "$PKG_ROOT/venv/bin/python3" ]; then
+    PYTHON="$PKG_ROOT/venv/bin/python3"
+elif [ -n "$DEV_ROOT" ] && [ -x "$DEV_ROOT/.venv/bin/python3" ]; then
+    PYTHON="$DEV_ROOT/.venv/bin/python3"
+else
+    echo "meet-transcriber: no venv found at $PKG_ROOT/venv or dev .venv" >&2
+    exit 1
+fi
+
+exec "$PYTHON" -m meet_transcriber "$@"

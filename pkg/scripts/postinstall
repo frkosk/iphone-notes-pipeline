@@ -1,0 +1,65 @@
+#!/bin/bash
+# Post-install: symlink bin, run config wizard, write launchd plist, load, smoke test.
+set -eu
+
+PKG_ROOT="/usr/local/opt/meet-transcriber"
+BIN_SRC="$PKG_ROOT/bin/meet-transcriber"
+BIN_DST="/usr/local/bin/meet-transcriber"
+
+# Determine the real GUI user (postinstall runs as root)
+GUI_USER="$(stat -f%Su /dev/console)"
+GUI_HOME="$(dscl . -read /Users/"$GUI_USER" NFSHomeDirectory | awk '{print $2}')"
+GUI_UID="$(id -u "$GUI_USER")"
+
+LOG_PATH="$GUI_HOME/Library/Logs/meet-transcriber/daemon.log"
+WATCH_PATH="$GUI_HOME/Library/Group Containers/group.com.apple.VoiceMemos.shared/Recordings"
+PLIST_SRC="$PKG_ROOT/launchd/sk.lbstudio.meet-transcriber.plist"
+PLIST_DST="$GUI_HOME/Library/LaunchAgents/sk.lbstudio.meet-transcriber.plist"
+
+# 1. bin symlink
+mkdir -p /usr/local/bin
+ln -sf "$BIN_SRC" "$BIN_DST"
+
+# 2. Run wizard as the GUI user so osascript dialogs are visible
+mkdir -p "$GUI_HOME/Library/Application Support/meet-transcriber"
+chown "$GUI_USER":staff "$GUI_HOME/Library/Application Support/meet-transcriber"
+
+sudo -u "$GUI_USER" launchctl asuser "$GUI_UID" "$BIN_DST" reconfigure || {
+    osascript -e 'display dialog "Konfigurácia zrušená alebo zlyhala. Spusti neskôr: meet-transcriber reconfigure" with title "meet-transcriber" buttons {"OK"} default button "OK"'
+    exit 0
+}
+
+# 3. Write LaunchAgent plist
+mkdir -p "$(dirname "$PLIST_DST")"
+mkdir -p "$(dirname "$LOG_PATH")"
+chown -R "$GUI_USER":staff "$(dirname "$LOG_PATH")" "$(dirname "$PLIST_DST")"
+sed -e "s|__WATCH_PATH__|$WATCH_PATH|g" \
+    -e "s|__LOG_PATH__|$LOG_PATH|g" \
+    "$PLIST_SRC" > "$PLIST_DST"
+chown "$GUI_USER":staff "$PLIST_DST"
+
+# 4. Load the agent
+sudo -u "$GUI_USER" launchctl asuser "$GUI_UID" launchctl unload "$PLIST_DST" 2>/dev/null || true
+sudo -u "$GUI_USER" launchctl asuser "$GUI_UID" launchctl load "$PLIST_DST"
+
+# 5. Full Disk Access prompt — macOS requires user action, we can't grant it
+sudo -u "$GUI_USER" osascript <<'OSA'
+set msg to "Posledný krok (jednorazový):
+
+meet-transcriber potrebuje prístup k priečinku kde iPhone ukladá Voice Memos. macOS to zablokoval kvôli ochrane súkromia.
+
+Teraz sa otvorí System Settings → Privacy & Security → Full Disk Access.
+Klikni na „+", pridaj:
+
+  /usr/local/bin/meet-transcriber
+
+a zapni ho.
+
+Potom reštartuj daemon:
+  launchctl kickstart -k gui/$(id -u)/sk.lbstudio.meet-transcriber"
+
+display dialog msg with title "meet-transcriber — Full Disk Access" buttons {"Otvoriť Settings"} default button "Otvoriť Settings" with icon note
+do shell script "open 'x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles'"
+OSA
+
+exit 0

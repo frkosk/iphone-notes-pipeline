@@ -1,0 +1,19 @@
+# meet-transcriber config
+# Only output location is tweakable here. Transcription (voz-cli) and
+# diarization (who-cli) are both single-model Swift binaries with no runtime
+# knobs — nothing to tune.
+#
+# Postinstall / `meet-transcriber reconfigure` rewrites this file.
+
+[source]
+# Voice Memos iCloud sync folder
+path = "~/Library/Group Containers/group.com.apple.VoiceMemos.shared/Recordings"
+
+[output]
+mode = "obsidian"              # "obsidian" | "folder"
+path = ""                       # final folder where .md files land
+vault_name = ""                 # only for obsidian mode (for obsidian:// URI)
+
+[state]
+db_path = "~/Library/Application Support/meet-transcriber/state.db"
+log_path = "~/Library/Logs/meet-transcriber/daemon.log"

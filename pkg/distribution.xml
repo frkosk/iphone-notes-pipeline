@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>meet-transcriber</title>
+    <organization>sk.lbstudio</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="never" require-scripts="true" rootVolumeOnly="true"/>
+    <welcome file="welcome.txt" mime-type="text/plain"/>
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min="13.0"/>
+        </allowed-os-versions>
+    </volume-check>
+    <choices-outline>
+        <line choice="default">
+            <line choice="sk.lbstudio.meet-transcriber"/>
+        </line>
+    </choices-outline>
+    <choice id="default"/>
+    <choice id="sk.lbstudio.meet-transcriber" visible="false">
+        <pkg-ref id="sk.lbstudio.meet-transcriber"/>
+    </choice>
+    <pkg-ref id="sk.lbstudio.meet-transcriber" version="1.0" onConclusion="none">meet-transcriber.component.pkg</pkg-ref>
+</installer-gui-script>

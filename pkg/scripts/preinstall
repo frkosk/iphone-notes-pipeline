@@ -1,0 +1,17 @@
+#!/bin/bash
+# Pre-install checks: Apple Silicon + macOS 13+
+set -eu
+
+ARCH="$(uname -m)"
+if [ "$ARCH" != "arm64" ]; then
+    osascript -e "display dialog \"meet-transcriber vyžaduje Apple Silicon Mac (M1/M2/M3/M4). Detegovaná architektúra: $ARCH\" with title \"Nekompatibilný Mac\" buttons {\"OK\"} default button \"OK\" with icon stop"
+    exit 1
+fi
+
+MACOS_MAJOR="$(sw_vers -productVersion | cut -d. -f1)"
+if [ "$MACOS_MAJOR" -lt 13 ]; then
+    osascript -e "display dialog \"meet-transcriber vyžaduje macOS 13 (Ventura) alebo novší.\" with title \"Zastaraný macOS\" buttons {\"OK\"} default button \"OK\" with icon stop"
+    exit 1
+fi
+
+exit 0

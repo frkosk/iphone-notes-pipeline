@@ -1,0 +1,23 @@
+[project]
+name = "meet-transcriber"
+version = "0.1.0"
+description = "iPhone Voice Memos → Obsidian / folder transcripts (Voz + Who via Swift CLIs)"
+requires-python = ">=3.12"
+dependencies = [
+    # Transcription + Diarization both via Swift CLI wrappers (voz-cli, who-cli)
+    # over Desert Ant Labs' Voz and Who models. No MLX / PyTorch / HF deps.
+    "jinja2>=3.1",
+    "python-dateutil>=2.9",
+    "sqlite-utils>=3.36",
+    "soundfile>=0.12",
+]
+
+[project.scripts]
+meet-transcriber = "meet_transcriber.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/meet_transcriber"]

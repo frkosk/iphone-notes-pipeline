@@ -1,0 +1,21 @@
+meet-transcriber
+
+Nainštaluje nástroj na automatický prepis stretnutí z iPhone Voice Memos.
+
+Čo sa stane:
+  • Nainštaluje sa Python runtime, Voz (prepis) a Who (speaker diarization)
+    Swift binárky, a background daemon (LaunchAgent) do /usr/local/opt/meet-transcriber.
+  • Spýta sa kam ukladať prepisy (Obsidian vault alebo priečinok na disku).
+  • Daemon sleduje Voice Memos iCloud folder.
+  • Pri prvom behu si Voz (~467 MB) a Who (~81 MB) stiahnu modely automaticky.
+
+Čo robíš ty:
+  • Nahrávaš cez Voice Memos na iPhone.
+  • Čakáš 1-2 minúty na iCloud sync + prepis (50-min meeting ~20 s na M-chip).
+  • Dostaneš notifikáciu, otvoríš .md s prepisom v Obsidiane.
+
+Prepis môžeš copy-pastnúť do ChatGPT/Claude/Gemini na sumarizáciu —
+.md má v hlavičke pripravený prompt.
+
+Technológia: Desert Ant Labs' Voz (speech-to-text) + Who (speaker diarization),
+oboje offline, na-zariadení, na Apple Silicon.

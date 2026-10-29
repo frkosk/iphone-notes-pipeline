@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Swift (SPM)
+.build/
+.swiftpm/
+Package.resolved
+
+# macOS / editor
+.DS_Store
+*.swp
+
+# Build artefakty
+build/
+dist/
+
+# Nikdy necommitni .pkg (veľký) ani stiahnuté modely
+*.pkg
+models/
