@@ -44,6 +44,24 @@ meet-transcriber reconfigure
 
 Prepne vault / priečinok, znova sa opýta kam.
 
+## Dôležité — iCloud sync Voice Memos
+
+macOS **nestahuje** nové Voice Memos nahrávky z iCloud automaticky.
+Sync je **lazy** — spustí sa až keď otvoríš Voice Memos app (buď na iPhone,
+alebo na Mac).
+
+**Praktický workflow:**
+- Po nahrávaní na iPhone otvor Voice Memos.app na Mac (stačí raz na začiatku
+  dňa / po návrate k počítaču). Beží v pozadí, iCloud začne sťahovať.
+- Alebo otvor Voice Memos na iPhone — tiež triggerne sync.
+- Po stiahnutí daemon spracuje za pár sekúnd.
+
+**Technický detail:** Voice Memos používa CloudKit (nie CloudDocs), takže
+`brctl download` ani launchd WatchPaths nevedia prinútiť sync. Dá sa to
+obísť automaticky spustením Voice Memos.app silently cez
+`open -g -j /System/Applications/VoiceMemos.app` v cron / LaunchAgent-e —
+nie je zatiaľ súčasť pipeline, ale ak sa to stane bolestivé, viď open items.
+
 ## Dev install
 
 Prereqs: macOS 15+ (Sequoia), Xcode CLI tools (`xcode-select --install`),

@@ -11,7 +11,9 @@ Nainštaluje nástroj na automatický prepis stretnutí z iPhone Voice Memos.
 
 Čo robíš ty:
   • Nahrávaš cez Voice Memos na iPhone.
-  • Čakáš 1-2 minúty na iCloud sync + prepis (50-min meeting ~20 s na M-chip).
+  • Keď prídeš k počítaču, otvor Voice Memos.app na Mac raz
+    (iCloud sync je lazy — spustí sa až keď appka beží).
+  • Čakáš 1-2 minúty na sync + prepis (50-min meeting ~20 s na M-chip).
   • Dostaneš notifikáciu, otvoríš .md s prepisom v Obsidiane.
 
 Prepis môžeš copy-pastnúť do ChatGPT/Claude/Gemini na sumarizáciu —
