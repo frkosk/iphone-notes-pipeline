@@ -133,11 +133,10 @@ meet-transcriber reconfigure    # vault/folder picker wizard
   by [Desert Ant Labs](https://desertant.com) — on-device Apple Silicon speech + diarization modely.
   Zdarma do 100 k monthly active devices, zdieľané cez
   [desert-ant-core SPM package](https://github.com/Desert-Ant-Labs/desert-ant-core).
-- Postavené pre internú potrebu LB Studio.
 
 ## License
 
-[MIT](LICENSE) — Copyright © 2026 LB Studio.
+[MIT](LICENSE) — Copyright © 2026 František Kocúrik.
 
 Note: Voz & Who modely (Desert Ant Labs) sú proprietary — free do 100 k
 monthly active devices, viac v [LICENSE](LICENSE).
