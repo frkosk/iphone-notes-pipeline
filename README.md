@@ -51,10 +51,24 @@ Sync je **lazy** — spustí sa až keď otvoríš Voice Memos app (buď na iPho
 alebo na Mac).
 
 **Praktický workflow:**
-- Po nahrávaní na iPhone otvor Voice Memos.app na Mac (stačí raz na začiatku
-  dňa / po návrate k počítaču). Beží v pozadí, iCloud začne sťahovať.
-- Alebo otvor Voice Memos na iPhone — tiež triggerne sync.
-- Po stiahnutí daemon spracuje za pár sekúnd.
+Je to **dve fázy sync**:
+1. **Metadata push** (automaticky, rýchle) — Mac vidí že nahrávka existuje
+   ako placeholder `.filename.m4a.icloud` (0 B, len info)
+2. **Content download** (lazy, on-demand) — audio bytes sa stiahnu až keď
+   explicitne klikneš na nahrávku v Voice Memos app (na iPhone alebo Mac)
+
+Takže:
+- Po nahrávaní na iPhone otvor Voice Memos.app na Mac **a klikni na novú
+  nahrávku v zozname**. iCloud daemon ju stiahne, placeholder sa premenuje
+  na reálny `.m4a`, launchd WatchPaths detekuje change → naš daemon spracuje.
+- **Len otvorenie appky bez klik-u na nahrávku zrejme nestačí.**
+
+**Alternatíva — zapnúť always-download:**
+- iPhone: Settings → [tvoje meno] → iCloud → Voice Memos → **Optimize iPhone
+  Storage** = **OFF** → iCloud sťahuje full copy automaticky
+- Mac: System Settings → Apple ID → iCloud → **Optimize Mac Storage** = OFF
+- Trade-off: viac miesta na disku (každá nahrávka drží full copy aj po
+  background cleanup), ale **žiadne manuálne kliky**
 
 **Technický detail:** Voice Memos používa CloudKit (nie CloudDocs), takže
 `brctl download` ani launchd WatchPaths nevedia prinútiť sync. Dá sa to
