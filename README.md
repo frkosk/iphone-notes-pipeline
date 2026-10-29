@@ -137,4 +137,7 @@ meet-transcriber reconfigure    # vault/folder picker wizard
 
 ## License
 
-Interný firemný tool. Žiadna public license.
+[MIT](LICENSE) — Copyright © 2026 LB Studio.
+
+Note: Voz & Who modely (Desert Ant Labs) sú proprietary — free do 100 k
+monthly active devices, viac v [LICENSE](LICENSE).
