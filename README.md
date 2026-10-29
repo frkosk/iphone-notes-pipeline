@@ -1,7 +1,17 @@
-# meet-transcriber
+# iphone-notes-pipeline
 
-iPhone Voice Memos → prepis do Obsidian vaultu alebo priečinka na disku.
-Lokálne, offline po inštalácii. 50-min meeting = ~20 sekúnd na M-chip.
+Hands-off prepis klientskych stretnutí: **iPhone Voice Memos → Obsidian / priečinok**.
+Beží lokálne na Apple Silicon. 50-min meeting = **~20 sekúnd** celá pipeline.
+
+## Features
+
+- **Rýchlosť:** 150-300× real-time (Voz transcription + Who diarization, native Swift binárky)
+- **Lokálne, offline:** žiadne cloud API, žiadne HF tokeny, žiadne externé requesty
+- **Diarizácia:** Speaker A/B/C labels s ~5-sekundovou segmentáciou
+- **Jazyk:** 25 EU jazykov vrátane SK, CZ, EN (auto-detect)
+- **Výstup:** čistý Markdown s YAML frontmatter + pripravený AI prompt pre copy-paste do ChatGPT/Claude/Gemini
+- **Zero-config daemon:** launchd WatchPaths na Voice Memos iCloud folder
+- **Distribúcia:** jediný `.pkg` installer (34 MB)
 
 ## Architektúra
 
@@ -103,9 +113,9 @@ sekcie "Pre kolegov").
 ./pkg/build-pkg.sh
 ```
 
-Vyprodukuje `build/meet-transcriber-v1.0.pkg` (~200 MB — bundled Python
-runtime + venv + Swift binárky + app code; Voz/Who modely sa stiahnu
-na strane kolegu pri prvom behu). Nahraj ručne na NAS a pošli link.
+Vyprodukuje `build/meet-transcriber-v1.0.pkg` (**~34 MB** — bundled Python
+runtime + slim venv + Swift binárky + app code; Voz/Who modely sa stiahnu
+na strane kolegu pri prvom behu, ~550 MB). Nahraj ručne na NAS a pošli link.
 
 ## CLI príkazy
 
@@ -113,6 +123,18 @@ na strane kolegu pri prvom behu). Nahraj ručne na NAS a pošli link.
 meet-transcriber doctor         # over že ffmpeg/voz-cli/who-cli/config sú OK
 meet-transcriber status         # vault path, counts processed vs failed
 meet-transcriber process FILE   # spracuj jeden audio súbor
-meet-transcriber watch          # spravý jeden sweep (daemon ho volá)
+meet-transcriber watch          # sweep (daemon ho volá automaticky)
 meet-transcriber reconfigure    # vault/folder picker wizard
 ```
+
+## Credits
+
+- **[Voz](https://desertant.com/models/voz/)** a **[Who](https://desertant.com/models/who/)**
+  by [Desert Ant Labs](https://desertant.com) — on-device Apple Silicon speech + diarization modely.
+  Zdarma do 100 k monthly active devices, zdieľané cez
+  [desert-ant-core SPM package](https://github.com/Desert-Ant-Labs/desert-ant-core).
+- Postavené pre internú potrebu LB Studio.
+
+## License
+
+Interný firemný tool. Žiadna public license.
