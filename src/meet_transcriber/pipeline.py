@@ -22,7 +22,7 @@ def _parse_recorded_at(path: Path) -> datetime:
     return datetime.fromtimestamp(path.stat().st_mtime)
 
 from . import diarize as diarize_mod
-from . import whisper_wrapper
+from . import transcribe as transcribe_mod
 from .config import Config
 from .merge import merge
 from .notify import notify
@@ -53,10 +53,10 @@ def process_file(audio_path: Path, cfg: Config, templates_dir: Path, force: bool
 
         with tempfile.TemporaryDirectory(prefix="meet-transcriber-") as tmp:
             wav = Path(tmp) / "audio.wav"
-            whisper_wrapper.extract_wav(audio_path, wav)
+            transcribe_mod.extract_wav(audio_path, wav)
 
             # transcribe (Voz via voz-cli)
-            transcript = whisper_wrapper.transcribe(wav)
+            transcript = transcribe_mod.transcribe(wav)
             log.info(f"transcribed: {len(transcript.segments)} segments")
 
             # diarize (Who via who-cli)

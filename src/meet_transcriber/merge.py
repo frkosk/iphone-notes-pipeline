@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .diarize import Turn
-from .whisper_wrapper import Segment
+from .transcribe import Segment
 
 
 @dataclass

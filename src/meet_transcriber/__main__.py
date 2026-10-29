@@ -89,7 +89,7 @@ def cmd_status(args: argparse.Namespace) -> int:
 def cmd_doctor(args: argparse.Namespace) -> int:
     import shutil
     from .diarize import _find_cli as _find_who
-    from .whisper_wrapper import _find_cli as _find_voz
+    from .transcribe import _find_cli as _find_voz
 
     ok = True
 

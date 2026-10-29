@@ -1,8 +1,6 @@
 """Speech-to-text via Desert Ant Labs' Voz (Swift CLI wrapper).
 
-Despite the module name (kept for backwards compat with pipeline.py), this now
-shells out to `voz-cli`, a native Swift binary built from `swift-voz-wrapper/`.
-
+Shells out to `voz-cli`, a native Swift binary built from `swift-voz-wrapper/`.
 ~300-400× real-time on Apple Silicon. No MLX framework, no PyTorch, no HF Hub
 dependency. The Voz SDK handles its own model fetching on first run.
 
@@ -19,10 +17,6 @@ from pathlib import Path
 
 
 log = logging.getLogger("meet_transcriber.transcribe")
-
-
-# Kept for pipeline.py API compat; now unused since Voz has its own model.
-DEFAULT_MODEL = "voz"
 
 
 @dataclass
