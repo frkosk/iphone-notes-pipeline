@@ -19,9 +19,12 @@ from pathlib import Path
 log = logging.getLogger("meet_transcriber.diarize")
 
 
-# Drop speakers that occupy less than 5% of total audio time. Removes transient
-# false positives Who occasionally detects (brief tonal variations etc.).
-MIN_SHARE = 0.05
+# Drop speakers whose cumulative talk-time is below this (absolute seconds).
+# Scales naturally with recording length: a monologue's artefact-speakers under
+# ~10s get purged, while real but minor contributors in a long meeting (say,
+# someone who only chimes in for 20-30s in a 60-min call) pass through.
+# Calibrated for client meetings; tweak here if use case shifts.
+MIN_SECONDS = 10.0
 
 
 @dataclass
@@ -61,7 +64,7 @@ def _find_cli() -> Path:
 def diarize(wav_path: Path) -> list[Turn]:
     """Return speaker turns for an audio file (WAV/m4a/etc, Who handles decoding)."""
     cli = _find_cli()
-    cmd = [str(cli), str(wav_path), "--min-share", str(MIN_SHARE)]
+    cmd = [str(cli), str(wav_path), "--min-seconds", str(MIN_SECONDS)]
 
     proc = subprocess.run(cmd, capture_output=True, text=True)
     if proc.returncode != 0:
