@@ -136,7 +136,7 @@ meet-transcriber reconfigure    # vault/folder picker wizard
 
 ## License
 
-[MIT](LICENSE) — Copyright © 2026 František Kocúrik.
+[MIT](LICENSE) — Copyright © 2026 Feri Kocúrik.
 
 Note: Voz & Who modely (Desert Ant Labs) sú proprietary — free do 100 k
 monthly active devices, viac v [LICENSE](LICENSE).
